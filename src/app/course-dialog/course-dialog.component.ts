@@ -5,23 +5,28 @@ import {FormBuilder, Validators, FormGroup} from "@angular/forms";
 import moment from 'moment';
 import {catchError} from 'rxjs/operators';
 import {throwError} from 'rxjs';
+import { CoursesService } from '../services/courses.service';
+import { LoadingService } from '../loading/loading.service';
 
 @Component({
     selector: 'course-dialog',
     templateUrl: './course-dialog.component.html',
     styleUrls: ['./course-dialog.component.css'],
-    standalone: false
+    standalone: false,
+    providers: [LoadingService]
 })
 export class CourseDialogComponent implements AfterViewInit {
 
     form: FormGroup;
-
     course:Course;
 
     constructor(
         private fb: FormBuilder,
         private dialogRef: MatDialogRef<CourseDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) course:Course) {
+        @Inject(MAT_DIALOG_DATA) course:Course,
+        private coursesService: CoursesService,
+        public loadingService: LoadingService
+      ) {
 
         this.course = course;
 
@@ -32,6 +37,7 @@ export class CourseDialogComponent implements AfterViewInit {
             longDescription: [course.longDescription,Validators.required]
         });
 
+
     }
 
     ngAfterViewInit() {
@@ -41,6 +47,14 @@ export class CourseDialogComponent implements AfterViewInit {
     save() {
 
       const changes = this.form.value;
+      const saveCourse$ = this.coursesService.saveCourse(this.course.id, changes);
+
+      this.loadingService.showLoaderUntilCompleted(saveCourse$)
+      .subscribe(
+        (val) => {
+          this.dialogRef.close(val);
+        }
+      )
 
     }
 
