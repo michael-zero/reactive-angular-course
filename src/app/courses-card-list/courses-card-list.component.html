@@ -14,9 +14,10 @@
 
       <mat-card-actions class="course-actions">
 
-        <button mat-raised-button color="primary" [routerLink]="['/courses', course.id]">
+        <button mat-raised-button color="primary"(click)="goToCourse(course.id)">
           VIEW COURSE
         </button>
+
 
         <button mat-raised-button color="accent"
                 (click)="editCourse(course)">

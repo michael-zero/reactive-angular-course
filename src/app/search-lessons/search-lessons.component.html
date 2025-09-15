@@ -8,26 +8,43 @@
 
   </mat-form-field>
 
-  <button class="search" mat-raised-button color="primary">
+  <button
+  (click)="onSearch(searchInput.value)"
+  class="search" mat-raised-button color="primary">
     <mat-icon>search</mat-icon>
     Search
   </button>
 
-    <table class="lessons-table mat-elevation-z7">
+    @if (!activeLesson) {
+      @if (searchResult$ | async; as lessons) {
+         <table class="lessons-table mat-elevation-z7">
 
-      <thead>
-      <th>#</th>
-      <th>Description</th>
-      <th>Duration</th>
-      </thead>
+            <thead>
+            <th>#</th>
+            <th>Description</th>
+            <th>Duration</th>
+            </thead>
 
-      <!-- tr class="lesson-row">
-        <td class="seqno-cell">{{lesson.seqNo}}</td>
-        <td class="description-cell">{{lesson.description}}</td>
-        <td class="duration-cell">{{lesson.duration}}</td>
-      </tr -->
+            @for (lesson of lessons; track $index) {
+              <tr class="lesson-row"  (click)="openLesson(lesson)">
+              <td class="seqno-cell">{{lesson.seqNo}}</td>
+              <td class="description-cell">{{lesson.description}}</td>
+              <td class="duration-cell">{{lesson.duration}}</td>
+            </tr>
+            }
 
-    </table>
+          </table>
+     }
+    }@else {
+      <button (click)="onBackToSearch()" mat-raised-button class="back-btn">
+        Back to search
+      </button>
+
+      <lesson [lesson]="activeLesson"></lesson>
+    }
+
+
+
 
 
 

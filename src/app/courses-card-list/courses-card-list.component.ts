@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { filter, tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'courses-card-list',
@@ -26,9 +27,13 @@ export class CoursesCardListComponent implements OnInit {
   @Output()
   private coursesChanged = new EventEmitter();
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog,private router: Router) { }
 
   ngOnInit() {
+  }
+
+   goToCourse(courseId: number | string) {
+    this.router.navigate(['/courses', courseId]);
   }
 
 
